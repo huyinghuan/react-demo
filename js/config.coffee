@@ -6,5 +6,3 @@ require.config(
   },
   deps: ["index"]
 )
-
-#require 
