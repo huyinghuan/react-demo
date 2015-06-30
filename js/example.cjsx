@@ -13,6 +13,9 @@ define ["react", "service", "c/form/select"], (React, BaseFormService, SimpleSel
     
     finishInit: (name, value)->
       console.log(name, " init to ", value)
+      
+  getParams = ->
+    address: "湘潭"
 
   React.createClass({
 
@@ -25,7 +28,7 @@ define ["react", "service", "c/form/select"], (React, BaseFormService, SimpleSel
     render: -> 
       (
         <div>
-          <SimpleSelect name="address" bean={bean} init={true}/>
+          <SimpleSelect name="address" bean={bean} init={true}， params={getParams()}/>
         </div>
       )
 })

@@ -1,8 +1,8 @@
 define ["react"], (React)->
     React.createClass({
       #加载数据
-      name = @props.name
       loadData: (params = {})->
+        name = @props.name
         self = @
         @props.bean.getData(name, params).then((result)->
           self.setState(options: result)
