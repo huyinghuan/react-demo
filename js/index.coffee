@@ -1,3 +1,3 @@
-require ["react", "c/comment-box"],
-  (React, CommentBox)->
-    React.render React.createElement(CommentBox), document.querySelector("body")
+require ["react", "example"],
+  (React, Example)->
+    React.render React.createElement(Example), document.querySelector("body")
