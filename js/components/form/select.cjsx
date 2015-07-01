@@ -4,11 +4,11 @@ define ["react"], (React)->
       loadData: (params = {})->
         name = @props.name
         self = @
-        @props.bean.getData(name, params).then((result)->
+        @props.getData(name, params).then((result)->
           self.setState(options: result)
-          #TODO 应该触发finishiInit函数
+          #TODO 应该触发 finishiInit 函数
           ###
-            self.init(name, result[0])
+            self.finishiInit(name, result[0])
           ###
         )
       
@@ -16,16 +16,25 @@ define ["react"], (React)->
       getInitialState: -> options: []
         
       #自定义属性
-      handleChange: ->
-        @props.bean.formChange(@props.name, React.findDOMNode(@).value)
+      handleChange: (e)->
+        @props.formChange(@props.name, e.currentTarget.value)
         
       #初始化props
       getDefaultProps: -> null
 
-      componentDidMount: ->
+      componentWillMount: ->
         @loadData() if @props.init isnt false
-          
         
+      componentDidMount: ->
+        
+      #初始化的时候不会调用，后续依赖改变会调用
+      componentWillReceiveProps: (nextProps, nextState)->
+        
+        return true if @props.init isnt false
+        obj = {}
+        obj[nextProps.dependName] =  nextProps.depend
+        @loadData(obj)
+        true
         
       render: ->
         options = @state.options

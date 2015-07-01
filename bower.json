@@ -4,6 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "react": "*",
-    "q": "~1.0.1"
+    "q": "~1.0.1",
+    "lodash": "~3.10.0"
   }
 }

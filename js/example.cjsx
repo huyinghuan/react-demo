@@ -4,31 +4,48 @@ define ["react", "service", "c/form/select"], (React, BaseFormService, SimpleSel
     constructor: ->
     
   biz = new Biz()
+  bean =
+    getData: (name, params)-> biz[name](params)
 
-  bean = 
-    getData: (name)-> biz[name]()
-    
     formChange: (name, value)->
-      console.log(name, " changed to ", value)
-    
+      obj = {}
+      obj[name] = value
+      @setProps(obj)
+        
     finishInit: (name, value)->
-      console.log(name, " init to ", value)
-      
-  getParams = ->
-    address: "湘潭"
-
+      obj = {}
+      obj[name] = value
+      @setProps(obj)
+        
   React.createClass({
-
+    mixins: [bean]
+    
     #初始化 state
     getInitialState: -> null
 
     #初始化props
-    getDefaultProps: -> null
-
+    getDefaultProps: ->
+      #此处应该模拟　从url的query抽取默认值
+      {
+        address: "0732"
+        area: "fr"
+      }
     render: -> 
       (
         <div>
-          <SimpleSelect name="address" bean={bean} init={true}， params={getParams()}/>
+          <SimpleSelect name="address"
+            init={true}
+            getData={@getData}
+            formChange={@formChange}
+            finishiInit: {@finishiInit}
+            value={@props.address}
+          />
+          <SimpleSelect name="area" 
+            init={false}
+            getData={@getData}
+            formChange={@formChange}
+            dependName="address"
+            depend={@props.address}/>
         </div>
       )
 })
