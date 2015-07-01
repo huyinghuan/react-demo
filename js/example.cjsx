@@ -1,9 +1,10 @@
-define ["react", "service", "c/form/select"], (React, BaseFormService, SimpleSelect)->
+define ["react", "service", "c/form/select", "chart", "_", "utils"], (React, BaseFormService, SimpleSelect, Chart, _, utils)->
   
   class Biz extends BaseFormService
     constructor: ->
     
-  biz = new Biz()
+  biz = new Biz()    
+  
   bean =
     getData: (name, params)-> biz[name](params)
 
@@ -15,6 +16,12 @@ define ["react", "service", "c/form/select"], (React, BaseFormService, SimpleSel
     finishInit: (name, value)->
       obj = {}
       obj[name] = value
+      utils.setHash(obj)
+      switch name
+        when "area"
+         @setProps({chartParams: utils.getHash()})
+          
+        
       @setProps(obj)
         
   React.createClass({
@@ -24,28 +31,29 @@ define ["react", "service", "c/form/select"], (React, BaseFormService, SimpleSel
     getInitialState: -> null
 
     #初始化props
-    getDefaultProps: ->
-      #此处应该模拟　从url的query抽取默认值
-      {
-        address: "0732"
-        area: "fr"
-      }
+    getDefaultProps: -> 
+      chartParams: {}
+
     render: -> 
       (
         <div>
-          <SimpleSelect name="address"
-            init={true}
-            getData={@getData}
-            formChange={@formChange}
-            finishiInit: {@finishiInit}
-            value={@props.address}
-          />
-          <SimpleSelect name="area" 
-            init={false}
-            getData={@getData}
-            formChange={@formChange}
-            dependName="address"
-            depend={@props.address}/>
+          <div>
+            <SimpleSelect name="address"
+              getData={@getData}
+              formChange={@formChange}
+              finishInit={@finishInit}
+              value={@props.address}
+            />
+            <SimpleSelect name="area" 
+              init={false}
+              getData={@getData}
+              formChange={@formChange}
+              finishInit={@finishInit}
+              dependName="address"
+              depend={@props.address}/>
+          </div>
+          <Chart name="memery" params={@props.chartParams}/>
+          <Chart name="cpu" params={@props.chartParams}/>
         </div>
       )
 })

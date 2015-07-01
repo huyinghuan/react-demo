@@ -6,10 +6,10 @@ define ["react"], (React)->
         self = @
         @props.getData(name, params).then((result)->
           self.setState(options: result)
-          #TODO 应该触发 finishiInit 函数
-          ###
-            self.finishiInit(name, result[0])
-          ###
+          #触发 finishiInit 函数
+          firstItem =  result[0]
+          value = firstItem.value or firstItem
+          self.props.finishInit(name, value)
         )
       
       #初始化 state
@@ -29,12 +29,13 @@ define ["react"], (React)->
         
       #初始化的时候不会调用，后续依赖改变会调用
       componentWillReceiveProps: (nextProps, nextState)->
-        
-        return true if @props.init isnt false
+        #是否自动初始化
+        return if @props.init isnt false
+        #前后两次依赖的值是否改变
+        return if @props.depend is nextProps.depend
         obj = {}
         obj[nextProps.dependName] =  nextProps.depend
         @loadData(obj)
-        true
         
       render: ->
         options = @state.options
