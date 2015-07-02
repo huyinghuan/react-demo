@@ -11,28 +11,33 @@ define ["react", "service", "c/form/select", "chart", "_", "utils"], (React, Bas
     formChange: (name, value)->
       obj = {}
       obj[name] = value
-      @setProps(obj)
+      utils.setHash(obj)
+      switch name
+        when "address"
+          @setProps(obj)
+        when "area"
+          @setState({chartParams: utils.getHash()})
         
     finishInit: (name, value)->
       obj = {}
       obj[name] = value
       utils.setHash(obj)
       switch name
+        when "address"
+          @setProps(obj)
         when "area"
-         @setProps({chartParams: utils.getHash()})
+          @setState({chartParams: utils.getHash()})
           
-        
-      @setProps(obj)
-        
+
+      
   React.createClass({
     mixins: [bean]
     
     #初始化 state
-    getInitialState: -> null
+    getInitialState: -> {}
 
     #初始化props
-    getDefaultProps: -> 
-      chartParams: {}
+    getDefaultProps: -> {}
 
     render: -> 
       (
@@ -52,8 +57,8 @@ define ["react", "service", "c/form/select", "chart", "_", "utils"], (React, Bas
               dependName="address"
               depend={@props.address}/>
           </div>
-          <Chart name="memery" params={@props.chartParams}/>
-          <Chart name="cpu" params={@props.chartParams}/>
+          <Chart name="memery" params={@state.chartParams}/>
+          <Chart name="cpu" params={@state.chartParams}/>
         </div>
       )
 })

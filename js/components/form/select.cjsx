@@ -25,7 +25,7 @@ define ["react"], (React)->
       componentWillMount: ->
         @loadData() if @props.init isnt false
         
-      componentDidMount: ->
+      #componentDidMount: ->
         
       #初始化的时候不会调用，后续依赖改变会调用
       componentWillReceiveProps: (nextProps, nextState)->
